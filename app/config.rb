@@ -5,3 +5,7 @@ module Config
   APP_HOST = "#{ENV['DNSDOCK_NAME']}.#{ENV['DNSDOCK_IMAGE']}.docker"
   APP_PORT = 4567
 end
+
+DataMapper.setup(:default, 'postgres://postgres:postgres@postgres.bihe.docker/postgres')
+DataMapper.finalize
+Task.auto_migrate!
