@@ -5,8 +5,10 @@ dnsdock:
   ports:
     - 172.17.42.1:53:53/udp
 ruby:
-  build: ./app
+  # build: ./app
+  image: narayana-ruby
   dns: 172.17.42.1
+  command: bash ./foreman_wrapper.sh
   volumes:
     - ./app:/usr/src/app
   ports:
@@ -14,6 +16,11 @@ ruby:
   environment:
     - DNSDOCK_NAME=ruby
     - DNSDOCK_IMAGE=bihe
+    - WAIT_COMMAND=psql -h postgres.bihe.docker -p 5432 -U postgres --dbname postgres -l
+    - WAIT_START_CMD=/usr/local/bundle/bin/foreman start --root /usr/src/app
+    - WAIT_SLEEP=2
+    - WAIT_LOOPS=10
+    - PGPASSWORD=postgres
 narayana:
   build: ./wildfly-narayana
   dns: 172.17.42.1
