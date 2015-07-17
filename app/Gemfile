@@ -1,0 +1,11 @@
+source 'http://rubygems.org'
+
+gem 'foreman'
+gem 'sinatra'
+gem 'thin'
+gem 'datamapper'
+gem 'dm-sqlite-adapter'
+gem 'sqlite3'
+gem 'httparty'
+gem 'crack'
+gem 'link_header'

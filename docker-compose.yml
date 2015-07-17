@@ -1,0 +1,24 @@
+dnsdock:
+  image: tonistiigi/dnsdock
+  volumes:
+    - /var/run/docker.sock:/run/docker.sock
+  ports:
+    - 172.17.42.1:53:53/udp
+ruby:
+  image: narayana-ruby
+  dns: 172.17.42.1
+  volumes:
+    - ./app:/usr/src/app
+  ports:
+    - "8081:4567"
+  environment:
+    - DNSDOCK_NAME=ruby
+    - DNSDOCK_IMAGE=bihe
+narayana:
+  image: narayana
+  dns: 172.17.42.1
+  ports:
+    - "8080:8080"
+  environment:
+    - DNSDOCK_NAME=narayana
+    - DNSDOCK_IMAGE=bihe
