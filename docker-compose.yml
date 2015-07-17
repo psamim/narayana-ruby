@@ -18,8 +18,8 @@ ruby:
     - DNSDOCK_IMAGE=bihe
     - WAIT_COMMAND=psql -h postgres.bihe.docker -p 5432 -U postgres --dbname postgres -l
     - WAIT_START_CMD=/usr/local/bundle/bin/foreman start --root /usr/src/app
-    - WAIT_SLEEP=2
-    - WAIT_LOOPS=10
+    - WAIT_SLEEP=1
+    - WAIT_LOOPS=15
     - PGPASSWORD=postgres
 narayana:
   build: ./wildfly-narayana
