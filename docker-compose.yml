@@ -5,8 +5,7 @@ dnsdock:
   ports:
     - 172.17.42.1:53:53/udp
 ruby:
-  # build: ./app
-  image: narayana-ruby
+  build: ./app
   dns: 172.17.42.1
   command: bash ./foreman_wrapper.sh
   volumes:
