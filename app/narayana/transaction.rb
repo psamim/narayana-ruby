@@ -6,11 +6,15 @@ class Transaction
   attr_reader :response
 
   def initialize
+    MyLogger.info "Tx: Initializing a new transaction"
+
     response = HTTParty.post(
       Config::TS_MANAGER_URL,
       headers: {"mediaType" => "application/x-www-form-urlencoded"}
     )
     @url = response.headers['location']
+
+    MyLogger.info "Tx: Transaction initialized #{@url}"
   end
 
   def status
@@ -24,6 +28,8 @@ class Transaction
   end
 
   def status=(newStatus)
+    MyLogger.info "Tx: Putting #{newStatus} to transaction #{@url}"
+
     @response = HTTParty.put(
       "#{@url}/terminator",
       headers: {
@@ -53,17 +59,21 @@ class Transaction
   end
 
   def participate(resource)
+    MyLogger.info "Tx: participate #{resource} in #{@url}"
+
     links = LinkHeader.new(
       [["#{resource}", [["rel", "participant"]]],
        ["#{resource}/terminator",    [["rel", "terminator"]]]]
     ).to_s
-    puts links
     response = HTTParty.post(
       @url,
       headers: {
         "Link" => links
       }
     )
+
+    MyLogger.info "Tx: status #{response.code}, participate #{resource} in #{@url}"
+    puts response
     response
   end
 end
