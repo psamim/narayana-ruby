@@ -21,9 +21,9 @@ class Task
   def txStatus(txStatus)
     MyLogger.info "TaskModel: Setting status #{txStatus} for task #{self.id}"
 
-    if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionPrepared].include? newStatus then
+    if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionPrepared].include? txStatus then
       return self.commit
-    elsif :TransactionRolledBack == newStatus then
+    elsif :TransactionRolledBack == txStatus then
       return self.rollback
     end
 
@@ -37,7 +37,7 @@ class Task
       MyLogger.warn "TaskModel: Task #{self.id}, Task failed."
       return false
     elsif self.commitSubTasks
-      self.status = :TransactionCommitted
+      self.update status: :TransactionCommitted
       MyLogger.info "TaskModel: Task #{self.id}, committed successfully"
       return true
     else
@@ -49,7 +49,7 @@ class Task
 
   def rollback
     MyLogger.info "TaskModel: Task #{self.id}, trying to rollback all subtasks"
-    self.txStatus :TransactionRolledBack
+    self.update status: :TransactionRolledBack
     self.tasks.all.update status: :TransactionRolledBack
     return true
   end
@@ -66,7 +66,7 @@ class Task
       self.tasks.all(status: :TransactionCommittedOnePhase).count
 
     if committedTasks == tasksBeforeCommit
-      MyLogger.info "Task #{self.id}: All sub-tasks were committed before."
+      MyLogger.info "TaskModel: Task #{self.id}: All sub-tasks were committed before."
       return true
     end
 
@@ -80,19 +80,19 @@ class Task
     # Wait until all sub-tasks are committed or return false
     counter = 0
     while committedTasks != tasksBeforeCommit
-      MyLogger.info "Task #{self.id}: Waiting for sub-tasks to commit."
-      sleep 0.5
+      MyLogger.info "TaskModel: Task #{self.id}: Waiting for sub-tasks to commit."
+      sleep 1
       counter +=1
       committedTasks =
         self.tasks.all(status: :TransactionCommitted).count +
         self.tasks.all(status: :TransactionCommittedOnePhase).count
       if counter == 10
-        MyLogger.warn "Task #{self.id}: Sub-tasks did not commit in #{counter*0.5} seconds, aborting."
+        MyLogger.warn "TaskModel: #{self.id}: Sub-tasks did not commit in #{counter*0.5} seconds, aborting."
         return false
       end
     end
 
-    MyLogger.info "Task #{self.id}: sub-tasks committed successfully"
+    MyLogger.info "TaskModel: Task #{self.id}: sub-tasks committed successfully"
     return true
   end
 end
