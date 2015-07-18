@@ -1,11 +1,20 @@
+# This image lets containers communicate through its
+# DNS service, knowing eachother.
+# Each container is accessible as {$DNS_NAME}.{$DNS_IMAGE}.docker
 dnsdock:
   image: tonistiigi/dnsdock
   volumes:
     - /var/run/docker.sock:/run/docker.sock
   ports:
     - 172.17.42.1:53:53/udp
+
+# This is the main image of our application, we use a wrapper around
+# foreman as command and some env vars to be able to wait for postgres to boot up
+# and accept connections.
+# Accessible on port 8081 of the host machine.
 ruby:
-  build: ./app
+  # build: ./app
+  image: narayana-ruby
   dns: 172.17.42.1
   command: bash ./foreman_wrapper.sh
   volumes:
@@ -20,6 +29,9 @@ ruby:
     - WAIT_SLEEP=1
     - WAIT_LOOPS=15
     - PGPASSWORD=postgres
+
+# Wildfly applications server with narayana and REST API enabled (rts).
+# Accessible on port 8080 of the host machine.
 narayana:
   build: ./wildfly-narayana
   dns: 172.17.42.1
@@ -28,6 +40,8 @@ narayana:
   environment:
     - DNSDOCK_NAME=narayana
     - DNSDOCK_IMAGE=bihe
+
+# Postgresql database, with some env vars to set user and password.
 postgres:
   image: postgres
   dns: 172.17.42.1
