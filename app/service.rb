@@ -39,7 +39,7 @@ class Service < Sinatra::Base
     halt 410 if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionRolledBack].include? @task.status
 
     # If PUT fails, e.g., the participant cannot be prepared, then the service writer must return 409.
-    if !@task.status = newStatus
+    if ! @task.txStatus newStatus
       logger.info "Task ID: #{@task.id}, Status: #{@task.status}, cannot set status"
       halt 409
     end

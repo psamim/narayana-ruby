@@ -12,18 +12,52 @@ class Task
                  :TransactionRolledBack
                ],
            default: :TransactionActive
-  property :fails, Boolean, default: true
+  property :fails, Boolean, default: false
 
   def url
     "http://#{Config::APP_HOST}:#{Config::APP_PORT}/task/#{self.id}"
   end
 
-  def status=(newStatus)
-    MyLogger.info "TaskModel: Setting status #{newStatus} for task #{self.id}"
+  def txStatus(txStatus)
+    MyLogger.info "TaskModel: Setting status #{txStatus} for task #{self.id}"
 
+    if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionPrepared].include? newStatus then
+      return self.commit
+    elsif :TransactionRolledBack == newStatus then
+      return self.rollback
+    end
+
+    return false
+  end
+
+  def commit
+    MyLogger.info "TaskModel: Task #{self.id}, trying to commit"
+
+    if self.fails
+      MyLogger.warn "TaskModel: Task #{self.id}, Task failed."
+      return false
+    elsif self.commitSubTasks
+      self.status = :TransactionCommitted
+      MyLogger.info "TaskModel: Task #{self.id}, committed successfully"
+      return true
+    else
+      MyLogger.warn "TaskModel: Task #{self.id}, commit failed."
+      self.rollback
+      return false
+    end
+  end
+
+  def rollback
+    MyLogger.info "TaskModel: Task #{self.id}, trying to rollback all subtasks"
+    self.txStatus :TransactionRolledBack
+    self.tasks.all.update status: :TransactionRolledBack
+    return true
+  end
+
+  def commitSubTasks
     if self.tasks.empty?
-      MyLogger.info "TaskModel: Task #{self.id}, no sub-tasks."
-      return self.attribute_set(:status, newStatus) 
+      MyLogger.info "TaskModel: Task #{self.id}, has no sub-tasks."
+      return true
     end
 
     tasksBeforeCommit = self.tasks.count
@@ -33,7 +67,7 @@ class Task
 
     if committedTasks == tasksBeforeCommit
       MyLogger.info "Task #{self.id}: All sub-tasks were committed before."
-      return self.attribute_set(:status, newStatus)
+      return true
     end
 
     # Commit all sub tasks in a transaction
@@ -53,19 +87,12 @@ class Task
         self.tasks.all(status: :TransactionCommitted).count +
         self.tasks.all(status: :TransactionCommittedOnePhase).count
       if counter == 10
-        MyLogger.info "Task #{self.id}: Sub-tasks did not commit in #{counter*0.5} seconds, aborting."
+        MyLogger.warn "Task #{self.id}: Sub-tasks did not commit in #{counter*0.5} seconds, aborting."
         return false
       end
     end
 
     MyLogger.info "Task #{self.id}: sub-tasks committed successfully"
-    return self.attribute_set(:status, newStatus)
+    return true
   end
-
-    def commit
-      self.status = :TransactionCommitted
-    end
-    
-    def commitSubTasks
-    end
 end
