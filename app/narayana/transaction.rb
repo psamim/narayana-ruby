@@ -35,11 +35,11 @@ class Transaction
   end
 
   def commit
-    self.status = "TransactionCommitted"
+    self.status = :TransactionCommitted
   end
 
   def rollback
-    self.status = "TransactionRolledBack"
+    self.status = :TransactionRolledBack
   end
 
   def all

@@ -9,3 +9,4 @@ end
 DataMapper.setup(:default, 'postgres://postgres:postgres@postgres.bihe.docker/postgres')
 DataMapper.finalize
 Task.auto_migrate!
+Call.auto_migrate!
