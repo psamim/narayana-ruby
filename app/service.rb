@@ -36,11 +36,18 @@ class Service < Sinatra::Base
 
     # After a request to change the resource state using TransactionRolledBack ,
     # TransactionCommitted or TransactionCommittedOnePhase, any subsequent PUT request will return a 409 or 410 code.
-    halt 410 if [:TransactionCommited, :TransactionCommitedOnePhase, :TransactionRolledBack].include? @task.status
+    halt 410 if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionRolledBack].include? @task.status
 
-    @task.status = newStatus
     # If PUT fails, e.g., the participant cannot be prepared, then the service writer must return 409.
-    halt 409 unless @task.save
+    if !@task.status = newStatus
+      logger.info "Task ID: #{@task.id}, Status: #{@task.status}, cannot set status"
+      halt 409
+    end
+
+    if !@task.save
+      logger.info "Task ID: #{@task.id}, Status: #{@task.status}, cannot save task"
+      halt 409
+    end
 
     # If PUT is successful then the implementation returns 200.
     status 200
@@ -54,7 +61,7 @@ class Service < Sinatra::Base
   end
 
   after do
-    logger.info "HTTP RESPONSE, Task ID: #{@task.id}, Response: #{response.status}"
+    logger.info "HTTP RESPONSE, Task ID: #{@task.id}, Response: #{response.status}" unless @task == nil
   end
 
   get '/' do
