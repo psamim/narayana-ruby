@@ -1,0 +1,100 @@
+#+LATEX_CLASS: assignment
+#+OPTIONS: toc:nil
+#+TITLE: Transaction Management Using Narayana In Ruby
+#+AUTHOR: Samim Pezeshki
+
+* Introduction
+This application is a demo for using JBoss Narayana as transaction manager in Ruby
+via REST API (rts Subsystem).
+There are two transaction types implemented, nested and chained.
+The whole environment and application is packaged into Docker containers.
+* Requirements
+- docker
+- docker-compose
+
+* Installing and Running
+#+BEGIN_SRC sh
+$ docker-compose up
+#+END_SRC
+
+The first time, this may take a long time as we need to download Ruby base image, PostgreSQL and Wildfly application server and
+build the application. Descriptions about each Docker container is available at =docker-compose.yml= file.
+
+* Description
+Narayana transaction manager is a part of Wildfly application server and can be used via its REST API When =rts=
+subsystem is enabled in Wildfly. Documentation about how =rts= API works is available at [[http://narayana.io/docs/project/index.html#d0e15500]].
+
+There were no implementation of Narayana API in Ruby so I created it. Communication 
+with Wildfly is done through =narayana/transaction= class. It can create a new transaction,
+enlist new participants and put or retrieve transaction status.
+
+Here is a sample code of how to use =Transaction= class.
+
+#+BEGIN_SRC ruby
+tx = Transaction.new # Asks for a new transaction on Wildfly
+tx.participate @resource  # Enlists resource in transction
+tx.commit # Puts new status to Wildfly fot this transaction
+#+END_SRC
+
+I created a /Task/ model using =DataMapper= ORM, and created the /Task/ resource using =Sinatra= to respond to
+API calls from Wildfly server according to Narayana documentation. Each task can be a type of /Chained/ or /Nested/.
+Chained tasks can have one /Next/ task. When a chained task is commited, its next task is
+triggered,
+Nested tasks can have multiple /SubTasks/. Each nested task is not commited until all of its subtasks are commited.
+
+Using this Task model, we can test our transaction manager. Here is sample code.
+
+Chained transactions
+
+#+BEGIN_SRC ruby
+t1 = Task.create type: :Chained
+t2 = Task.create type: :Chained
+
+# Creating chains
+t1.next = t2
+t1.save
+
+t1.commit
+#+END_SRC
+
+Nested transactions
+
+#+BEGIN_SRC ruby
+t1 = Task.create type: :Nested
+t2 = Task.create type: :Nested
+t3 = Task.create type: :Nested, fails: true
+
+# Creating nested
+t1.subtasks << t2
+t1.subtasks << t3
+t1.save
+
+t1.commit
+#+END_SRC
+
+Two sample scenarios are tested as client in the =client.rb= file, one chained transaction and one nested.
+These scenarios are run in a separate process called =client=. Also we have another process called =service= which
+is our server API talking to Narayana on Wildfly server. All interactions are logged to console. A sample log
+file is provided with the source code. Here is an example log. The full log output is available at =sample.log=.
+
+[[./screenshot.png]]
+
+The first column says that logs are from the Ruby container. The second column shows
+the name of the process. 
+
+* Technical Details
+The whole application is in Ruby programming language. It uses =Sinatra= and =Rack= for serving the API.
+It uses =DataMapper= as ORM for creating the model. =PostgreSQL= is used as our database for storing tasks.
+
+The processes are described in the file =Procfile= and are managed by =foreman= to run as daemons. 
+Eache line in the =Procfile= describes one process of the application.
+
+* Docker Images
+The application uses four docker images, postgres, wildfly-rts, dnsdock and ruby. 
+The Ruby image is the main image
+for our application which is built by the provided =Dockerfile=. These images are in the public Docker hub registry
+and are downloaded and built automatically by the above command on the first time. The image dnsdock is used a dns server
+between containers so that they can find eachother.
+
+These images are configured and run using =docker-compose=. The configuration is in the =docker-compose.yml= file.
+
