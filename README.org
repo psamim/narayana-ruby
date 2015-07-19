@@ -11,11 +11,12 @@ The whole environment and application is packaged into Docker containers.
 * Requirements
 - docker
 - docker-compose
-
+  
 * Installing and Running
 #+BEGIN_SRC sh
 $ docker-compose up
 #+END_SRC
+\vspace{2mm}
 
 The first time, this may take a long time as we need to download Ruby base image, PostgreSQL and Wildfly application server and
 build the application. Descriptions about each Docker container is available at =docker-compose.yml= file.
@@ -46,6 +47,7 @@ Using this Task model, we can test our transaction manager. Here is sample code.
 
 Chained transactions
 
+\vspace{2mm}
 #+BEGIN_SRC ruby
 t1 = Task.create type: :Chained
 t2 = Task.create type: :Chained
@@ -57,7 +59,9 @@ t1.save
 t1.commit
 #+END_SRC
 
+\vspace{2mm}
 Nested transactions
+\vspace{2mm}
 
 #+BEGIN_SRC ruby
 t1 = Task.create type: :Nested
@@ -71,6 +75,7 @@ t1.save
 
 t1.commit
 #+END_SRC
+\vspace{2mm}
 
 Two sample scenarios are tested as client in the =client.rb= file, one chained transaction and one nested.
 These scenarios are run in a separate process called =client=. Also we have another process called =service= which
@@ -81,6 +86,25 @@ file is provided with the source code. Here is an example log. The full log outp
 
 The first column says that logs are from the Ruby container. The second column shows
 the name of the process. 
+
+* Transaction Results
+The results can be seen in the log file or reproduced.
+
+The first scenario is a nested transaction as picture below. Transaction 4 aborts.
+As a result the all transactions are rolled back except transaction 7, which is not triggered
+as its parent has aborted.
+
+#+CAPTION: Nested Transaction
+#+ATTR_LATEX: :width 8cm
+[[./nested.png]]
+
+The second scenario is a chaiend transaction as seen picture below. C2 aborts.
+Chain stopps and its previous transaction is committed and nothing is changed. Its next
+transaction is not triggered and C2 itself is rolled back.
+
+#+CAPTION: Chained Transaction
+#+ATTR_LATEX: :width 8cm
+[[./chained.png]]
 
 * Technical Details
 The whole application is in Ruby programming language. It uses =Sinatra= and =Rack= for serving the API.
