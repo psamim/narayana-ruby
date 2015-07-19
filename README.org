@@ -4,8 +4,8 @@
 #+AUTHOR: Samim Pezeshki
 
 * Introduction
-This application is a demo for using JBoss Narayana as transaction manager in Ruby
-via REST API (rts Subsystem).
+This application is a demo for using JBoss Narayana as a transaction manager in Ruby
+via Narayana REST API (rts subsystem).
 There are two transaction types implemented, nested and chained.
 The whole environment and application is packaged into Docker containers.
 
@@ -25,11 +25,11 @@ build the application. Descriptions about each Docker container is available at 
 
 * Description
 Narayana transaction manager is a part of Wildfly application server and can be used via its REST API When =rts=
-subsystem is enabled in Wildfly. Documentation about how =rts= API works is available at [[http://narayana.io/docs/project/index.html#d0e15500]].
+subsystem is enabled in Wildfly. Documentation about how =rts= API works and interacts is available at [[http://narayana.io/docs/project/index.html#d0e15500]].
 
-There were no implementation of Narayana API in Ruby so I created it. Communication 
-with Wildfly is done through =narayana/transaction= class. It can create a new transaction,
-enlist new participants and put or retrieve transaction status.
+There were no implementation of Narayana API client in Ruby so I created it. Communication 
+with Narayana is done through =narayana/transaction= class and HTTP requests. It can create a new transaction,
+enlist new participants and put or retrieve the transaction status.
 
 Here is a sample code of how to use =Transaction= class.
 
@@ -38,19 +38,20 @@ Here is a sample code of how to use =Transaction= class.
 #+BEGIN_SRC ruby
 tx = Transaction.new # Asks for a new transaction on Wildfly
 tx.participate @resource  # Enlists resource in transction
-tx.commit # Puts new status to Wildfly fot this transaction
+tx.status # TransactionActive
+tx.commit # Puts new status (TransactionCommitted) to Narayana for this transaction
 #+END_SRC
 #+LATEX: \vspace{2mm}
 
 I created a /Task/ model using =DataMapper= ORM, and created the /Task/ resource using =Sinatra= to respond to
-API calls from Wildfly server according to Narayana documentation. Each task can be a type of /Chained/ or /Nested/.
+API calls from Wildfly server according to Narayana documentation. Each task can be type of /Chained/ or /Nested/.
 Chained tasks can have one /Next/ task. When a chained task is commited, its next task is
-triggered,
+triggered.
 Nested tasks can have multiple /SubTasks/. Each nested task is not commited until all of its subtasks are commited.
 
-Using this Task model, we can test our transaction manager. Here is sample code.
+Using this Task model, we can test our transaction manager. Here is a sample code.
 
-Chained transactions
+Chained transactions:
 
 #+LATEX: \vspace{2mm}
 
@@ -58,15 +59,17 @@ Chained transactions
 t1 = Task.create type: :Chained
 t2 = Task.create type: :Chained
 
-# Creating chains
+# Creating chain
 t1.next = t2
 t1.save
 
-t1.commit
+t1.commit # Commits t1 and then t2
 #+END_SRC
 
 #+LATEX: \vspace{2mm}
-Nested transactions
+
+Nested transactions:
+
 #+LATEX: \vspace{2mm}
 
 #+BEGIN_SRC ruby
@@ -74,8 +77,8 @@ t1 = Task.create type: :Nested
 t2 = Task.create type: :Nested
 t3 = Task.create type: :Nested, fails: true
 
-# Creating nested
-t1.subtasks << t2
+# Creating nested transaction
+t1.subtasks << t2 # Add t2 to subtasks
 t1.subtasks << t3
 t1.save
 
@@ -83,18 +86,18 @@ t1.commit
 #+END_SRC
 #+LATEX: \vspace{2mm}
 
-Two sample scenarios are tested as client in the =client.rb= file, one chained transaction and one nested.
+Two sample scenarios are tested as client in the =app/client.rb= file, one chained transaction and one nested.
 These scenarios are run in a separate process called =client=. Also we have another process called =service= which
-is our server API talking to Narayana on Wildfly server. All interactions are logged to console. A sample log
-file is provided with the source code. Here is an example log. The full log output is available at =sample.log=.
+is our server talking to Narayana API on Wildfly server. All interactions are logged to console. A sample log
+file is provided with the source code in =sample.log=. Here is an example log.
 
 [[./screenshot.png]]
 
-The first column says that logs are from the Ruby container. The second column shows
-the name of the process. 
+The first column says that logs are from the Ruby container or Narayana container. The second column shows
+the name of the process, client or service.
 
 * Transaction Results
-The results can be seen in the log file or reproduced.
+The results can be seen in the log file or reproduced by running the application.
 
 The first scenario is a nested transaction as picture below. Transaction 4 aborts.
 As a result the all transactions are rolled back except transaction 7, which is not triggered
@@ -104,10 +107,10 @@ as its parent has aborted.
 #+ATTR_LATEX: :width 8cm
 [[./nested.png]]
 
-The second scenario is a chained transaction as seen picture below. C2 aborts.
+The second scenario is a chained transaction as picture below. C2 aborts.
 Chain stops. Its previous transaction is committed and nothing is changed. Its next
 transaction is not triggered and C2 itself is rolled back. If we consider the whole
-chains as one transaction we can start from the beginning of C2 ad its previous
+chain as one transaction we can start from the beginning of C2 as its previous
 task is committed.
 
 #+CAPTION: Chained Transaction
@@ -115,8 +118,8 @@ task is committed.
 [[./chained.png]]
 
 * Technical Details
-The whole application is in Ruby programming language. It uses =Sinatra= and =Rack= for serving the API.
-It uses =DataMapper= as ORM for creating the model. =PostgreSQL= is used as our database for storing tasks.
+The whole application is in Ruby programming language. It uses =Sinatra= and =Rack= for serving the API client.
+It uses =DataMapper= as ORM for creating the Task model. =PostgreSQL= is used as our database for storing tasks.
 
 The processes are described in the file =Procfile= and are managed by =foreman= to run as daemons. 
 Each line in the =Procfile= describes one process of the application.
