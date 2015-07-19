@@ -1,21 +1,40 @@
 $:.unshift(File.dirname(__FILE__))
+$stdout.sync = true
 require 'rubygems'
 require 'data_mapper'
 require 'models/task'
+require 'models/calls'
 require 'narayana/transaction'
-require 'config'
+require 'globalconf'
+require 'helper/mylogger'
 
-sleep 30
+# Wait for others to boot
+sleep 15
 
-tx = Transaction.new
+# Create Tasks
+t1 = Task.create
+t2 = Task.create
+t3 = Task.create
+t4 = Task.create
+t5 = Task.create
+t6 = Task.create
+t7 = Task.create
 
-t1 = Task.create name: 'Task One'
-tx.participate t1.url
+# Create Nested Transactions
+t1.subtasks << t2
+t1.subtasks << t3
+t1.subtasks << t4
+t1.subtasks.save
 
-t2 = Task.create name: 'Task Two'
-tx.participate t2.url
+t2.subtasks << t5
+t2.subtasks << t6
+t2.subtasks.save
 
-tx.commit
+t4.subtasks << t7
+t2.subtasks.save
 
+t1.commit
+
+# Prevent client to send exit code
 while true
 end

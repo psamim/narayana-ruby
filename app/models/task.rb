@@ -50,20 +50,20 @@ class Task
   def rollback
     MyLogger.info "TaskModel: Task #{self.id}, trying to rollback all subtasks"
     self.update status: :TransactionRolledBack
-    self.tasks.all.update status: :TransactionRolledBack
+    self.subtasks.all.update status: :TransactionRolledBack
     return true
   end
 
   def commitSubTasks
-    if self.tasks.empty?
+    if self.subtasks.empty?
       MyLogger.info "TaskModel: Task #{self.id}, has no sub-tasks."
       return true
     end
 
-    tasksBeforeCommit = self.tasks.count
+    tasksBeforeCommit = self.subtasks.count
     committedTasks =
-      self.tasks.all(status: :TransactionCommitted).count +
-      self.tasks.all(status: :TransactionCommittedOnePhase).count
+      self.subtasks.all(status: :TransactionCommitted).count +
+      self.subtasks.all(status: :TransactionCommittedOnePhase).count
 
     if committedTasks == tasksBeforeCommit
       MyLogger.info "TaskModel: Task #{self.id}: All sub-tasks were committed before."
@@ -72,7 +72,7 @@ class Task
 
     # Commit all sub tasks in a transaction
     tx = Transaction.new
-    self.tasks.each do |t|
+    self.subtasks.each do |t|
       tx.participate t.url
     end
     tx.commit
@@ -84,8 +84,8 @@ class Task
       sleep 1
       counter +=1
       committedTasks =
-        self.tasks.all(status: :TransactionCommitted).count +
-        self.tasks.all(status: :TransactionCommittedOnePhase).count
+        self.subtasks.all(status: :TransactionCommitted).count +
+        self.subtasks.all(status: :TransactionCommittedOnePhase).count
       if counter == 10
         MyLogger.warn "TaskModel: #{self.id}: Sub-tasks did not commit in #{counter*0.5} seconds, aborting."
         return false
