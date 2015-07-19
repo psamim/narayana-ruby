@@ -8,6 +8,7 @@ This application is a demo for using JBoss Narayana as transaction manager in Ru
 via REST API (rts Subsystem).
 There are two transaction types implemented, nested and chained.
 The whole environment and application is packaged into Docker containers.
+
 * Requirements
 - docker
 - docker-compose
@@ -103,9 +104,11 @@ as its parent has aborted.
 #+ATTR_LATEX: :width 8cm
 [[./nested.png]]
 
-The second scenario is a chaiend transaction as seen picture below. C2 aborts.
-Chain stopps and its previous transaction is committed and nothing is changed. Its next
-transaction is not triggered and C2 itself is rolled back.
+The second scenario is a chained transaction as seen picture below. C2 aborts.
+Chain stops. Its previous transaction is committed and nothing is changed. Its next
+transaction is not triggered and C2 itself is rolled back. If we consider the whole
+chains as one transaction we can start from the beginning of C2 ad its previous
+task is committed.
 
 #+CAPTION: Chained Transaction
 #+ATTR_LATEX: :width 8cm
@@ -116,14 +119,14 @@ The whole application is in Ruby programming language. It uses =Sinatra= and =Ra
 It uses =DataMapper= as ORM for creating the model. =PostgreSQL= is used as our database for storing tasks.
 
 The processes are described in the file =Procfile= and are managed by =foreman= to run as daemons. 
-Eache line in the =Procfile= describes one process of the application.
+Each line in the =Procfile= describes one process of the application.
 
 * Docker Images
 The application uses four docker images, postgres, wildfly-rts, dnsdock and ruby. 
 The Ruby image is the main image
 for our application which is built by the provided =Dockerfile=. These images are in the public Docker hub registry
-and are downloaded and built automatically by the above command on the first time. The image dnsdock is used a dns server
-between containers so that they can find eachother.
+and are downloaded and built automatically by the above command on the first time. The image dnsdock is used a DNS server
+between containers so that they can find each other.
 
 These images are configured and run using =docker-compose=. The configuration is in the =docker-compose.yml= file.
 
