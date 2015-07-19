@@ -8,7 +8,5 @@ end
 class Task
   has n, :links_to_childs, 'Task::Call', :child_key => [ :parent_id ]
   has n, :subtasks, self, :through => :links_to_childs, :via => :child
-
-  has n, :links_to_parents, 'Task::Call', :child_key => [:child_id]
-  has n, :parents, self, :through => :links_to_parents, :via => :parent
+  has 1, :next, self, :through => :links_to_childs, :via => :child
 end
