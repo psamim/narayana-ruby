@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 gem 'foreman'
 gem 'sinatra'
+gem 'sinatra-synchrony'
 gem 'thin'
 gem 'datamapper'
 gem 'dm-postgres-adapter'

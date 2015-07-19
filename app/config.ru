@@ -2,7 +2,8 @@ $:.unshift(File.dirname(__FILE__))
 $stdout.sync = true
 
 Bundler.require
-require 'sinatra'
+require 'sinatra/base'
+require 'sinatra/synchrony'
 require 'rubygems'
 require 'bundler'
 require 'logger'
