@@ -3,7 +3,6 @@ require 'link_header'
 
 class Service < Sinatra::Base
   enable :logging
-  register Sinatra::Synchrony
 
   before '/task/:id*' do
     @task = Task.get params[:id]
