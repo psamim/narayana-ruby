@@ -5,7 +5,7 @@ class MyLogger
     if @_logger.nil?
       @_logger = Logger.new STDOUT
       @_logger.level = Logger::INFO
-      @_logger.datetime_format = '%H:%M:%S'
+      # @_logger.datetime_format = '%H:%M:%S'
     end
     @_logger
   end

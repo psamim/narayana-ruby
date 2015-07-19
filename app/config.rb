@@ -10,3 +10,8 @@ DataMapper.setup(:default, 'postgres://postgres:postgres@postgres.bihe.docker/po
 DataMapper.finalize
 Task.auto_migrate!
 Call.auto_migrate!
+
+# Use this function for logging
+def p(params)
+  MyLogger.info params
+end
