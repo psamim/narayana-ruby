@@ -2,7 +2,8 @@ $:.unshift(File.dirname(__FILE__))
 $stdout.sync = true
 require 'rubygems'
 require 'data_mapper'
-require 'models/task'
+require 'models/chainedtask'
+require 'models/nestedtask'
 require 'models/calls'
 require 'narayana/transaction'
 require 'helper/mylogger'
@@ -13,14 +14,14 @@ sleep 20
 
 p 'First scenario, nested transactions'
 p 'Creating 7 Tasks'
-t1 = Task.create type: :Nested
-t2 = Task.create type: :Nested
-t3 = Task.create type: :Nested
+t1 = NestedTask.create
+t2 = NestedTask.create
+t3 = NestedTask.create
 p 'Task 4 fails'
-t4 = Task.create type: :Nested, fails: true
-t5 = Task.create type: :Nested
-t6 = Task.create type: :Nested
-t7 = Task.create
+t4 = NestedTask.create fails: true
+t5 = NestedTask.create
+t6 = NestedTask.create
+t7 = NestedTask.create
 
 p 'Creating nested transactions graph'
 t1.subtasks << t2
@@ -52,11 +53,11 @@ p "Task 7: #{t7.reload.status}"
 
 p 'Second scenario, chained transactions'
 p 'Creating 4 Tasks, number 8 to 11'
-t8 = Task.create type: :Chained
-t9 = Task.create type: :Chained
+t8 = ChainedTask.create
+t9 = ChainedTask.create
 p 'Task 10 fails'
-t10 = Task.create type: :Chained, fails: true
-t11 = Task.create
+t10 = ChainedTask.create fails: true
+t11 = ChainedTask.create
 
 p 'Creating chains'
 t8.next = t9

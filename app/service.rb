@@ -5,7 +5,7 @@ class Service < Sinatra::Base
   enable :logging
 
   before '/task/:id*' do
-    @task = Task.get params[:id]
+    @task = Task.getWithType params[:id]
     # if the actor is unable to recover on the same URI then requests to the original endpoints
     # should return an HTTP status code of 301 (Moved Permanently)
     halt 301 if @task == nil
