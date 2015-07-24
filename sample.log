@@ -1,102 +1,166 @@
-ruby_1     | Sun Jul 19 07:38:21 UTC 2015 - waiting to be ready
-narayana_1 | 07:38:26,505 INFO  [org.jboss.as] (Controller Boot Thread) JBAS015874: WildFly 8.2.0.Final "Tweek" started in 15099ms - Started 222 of 271 services (93 services are lazy, passive or on-demand)
-dnsdock_1  | 2015/07/19 07:38:25 Added service: 0360ca2cab59a55a027bce7772742e541e9c9669072aaf84911761496b81c06d {narayana_dnsdock_1 dnsdock 172.17.3.108 -1 []}
-postgres_1 | LOG:  database system is ready to accept connections
-ruby_1     | 07:39:16 service.1 | started with pid 58
-ruby_1     | 07:39:16 client.1  | started with pid 59
-ruby_1     | 07:39:17 client.1  | I, [2015-07-19T07:39:17.595385 #59]  INFO -- : Wait for others to boot
-ruby_1     | 07:39:17 service.1 | * Listening on tcp://0.0.0.0:4567
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.595564 #59]  INFO -- : First scenario, nested transactions
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.595644 #59]  INFO -- : Creating 7 Tasks
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.604033 #59]  INFO -- : Task 4 fails
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.612921 #59]  INFO -- : Creating nested transactions graph
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.638641 #59]  INFO -- : Commit nested transaction
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.643660 #59]  INFO -- : Tx: Initializing a new transaction
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.767550 #59]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.771104 #59]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/2 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.781623 #59]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/2 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.781930 #59]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/3 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.787969 #59]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/3 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.789518 #59]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/4 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.795494 #59]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/4 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.795605 #59]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_d
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.840706 #58]  INFO -- : TX Manager put txstatus=TransactionPrepared for Task 4
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.840794 #58]  INFO -- : TaskModel: Setting status TransactionPrepared for task 4
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.840834 #58]  INFO -- : TaskModel: Task 4, Type: Nested, trying to commit
-ruby_1     | 07:39:37 service.1 | W, [2015-07-19T07:39:37.840869 #58]  WARN -- : TaskModel: Task 4, Task failed.
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.840919 #58]  INFO -- : Service: Task ID: 4, Status: TransactionActive, cannot set status
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.841011 #58]  INFO -- : HTTP RESPONSE, Task ID: 4, Response: 409
-ruby_1     | 07:39:37 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:37 +0000] "PUT /task/4/terminator HTTP/1.1" 409 - 0.0144
-narayana_1 | 07:39:37,848 WARN  [com.arjuna.ats.arjuna] (default task-5) ARJUNA012073: BasicAction.End() - prepare phase of action-id 0:ffffac110366:35f8b319:55ab53ee:d failed.
-narayana_1 | 07:39:37,849 WARN  [com.arjuna.ats.arjuna] (default task-5) ARJUNA012075: Action Aborting
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.852004 #58]  INFO -- : TX Manager put txstatus=TransactionRolledBack for Task 4
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.852081 #58]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 4
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.852119 #58]  INFO -- : TaskModel: Task 4, trying to rollback all subtasks
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.858513 #58]  INFO -- : HTTP RESPONSE, Task ID: 4, Response: 200
-ruby_1     | 07:39:37 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:37 +0000] "PUT /task/4/terminator HTTP/1.1" 200 - 0.0086
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.862205 #58]  INFO -- : TX Manager put txstatus=TransactionRolledBack for Task 3
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.862279 #58]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 3
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.862314 #58]  INFO -- : TaskModel: Task 3, trying to rollback all subtasks
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.868406 #58]  INFO -- : HTTP RESPONSE, Task ID: 3, Response: 200
-ruby_1     | 07:39:37 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:37 +0000] "PUT /task/3/terminator HTTP/1.1" 200 - 0.0090
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.871380 #58]  INFO -- : TX Manager put txstatus=TransactionRolledBack for Task 2
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.871456 #58]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 2
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.871492 #58]  INFO -- : TaskModel: Task 2, trying to rollback all subtasks
-ruby_1     | 07:39:37 service.1 | I, [2015-07-19T07:39:37.885008 #58]  INFO -- : HTTP RESPONSE, Task ID: 2, Response: 200
-ruby_1     | 07:39:37 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:37 +0000] "PUT /task/2/terminator HTTP/1.1" 200 - 0.0158
-ruby_1     | 07:39:37 client.1  | I, [2015-07-19T07:39:37.892984 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:38 client.1  | I, [2015-07-19T07:39:38.896593 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:39 client.1  | I, [2015-07-19T07:39:39.899867 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:40 client.1  | I, [2015-07-19T07:39:40.903536 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:41 client.1  | I, [2015-07-19T07:39:41.907683 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:42 client.1  | I, [2015-07-19T07:39:42.910943 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:43 client.1  | I, [2015-07-19T07:39:43.914153 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:44 client.1  | I, [2015-07-19T07:39:44.917179 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:45 client.1  | I, [2015-07-19T07:39:45.920172 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:46 client.1  | I, [2015-07-19T07:39:46.923289 #59]  INFO -- : TaskModel: Task 1: Waiting for sub-tasks to commit.
-ruby_1     | 07:39:47 client.1  | W, [2015-07-19T07:39:47.927562 #59]  WARN -- : TaskModel: 1: Sub-tasks did not commit in 5.0 seconds, aborting.
-ruby_1     | 07:39:47 client.1  | W, [2015-07-19T07:39:47.927651 #59]  WARN -- : TaskModel: Task 1, commit failed.
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.927674 #59]  INFO -- : TaskModel: Task 1, trying to rollback all subtasks
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.952502 #59]  INFO -- : Nested transaction finished
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.953966 #59]  INFO -- : Task 1: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.955978 #59]  INFO -- : Task 2: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.958179 #59]  INFO -- : Task 3: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.960572 #59]  INFO -- : Task 4: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.963541 #59]  INFO -- : Task 5: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.965797 #59]  INFO -- : Task 6: TransactionRolledBack
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.969043 #59]  INFO -- : Task 7: TransactionActive
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.969129 #59]  INFO -- : Second scenario, chained transactions
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.969162 #59]  INFO -- : Creating 4 Tasks, number 8 to 11
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.974654 #59]  INFO -- : Task 10 fails
-ruby_1     | 07:39:47 client.1  | I, [2015-07-19T07:39:47.978687 #59]  INFO -- : Creating chains
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.006975 #59]  INFO -- : Commit chained transaction
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.013938 #59]  INFO -- : Tx: Initializing a new transaction
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.019489 #59]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_11
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.020200 #59]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/9 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_11
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.026800 #59]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/9 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_11
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.027130 #59]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_11
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.036421 #58]  INFO -- : TX Manager put txstatus=TransactionCommittedOnePhase for Task 9
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.036487 #58]  INFO -- : TaskModel: Setting status TransactionCommittedOnePhase for task 9
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.036525 #58]  INFO -- : TaskModel: Task 9, Type: Chained, trying to commit
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.039241 #58]  INFO -- : Tx: Initializing a new transaction
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.044374 #58]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_13
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.047135 #58]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/10 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_13
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.052453 #58]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/10 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_13
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.052608 #58]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110366_35f8b319_55ab53ee_13
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.059494 #58]  INFO -- : TX Manager put txstatus=TransactionCommittedOnePhase for Task 10
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.059568 #58]  INFO -- : TaskModel: Setting status TransactionCommittedOnePhase for task 10
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.059592 #58]  INFO -- : TaskModel: Task 10, Type: Chained, trying to commit
-ruby_1     | 07:39:48 service.1 | W, [2015-07-19T07:39:48.059615 #58]  WARN -- : TaskModel: Task 10, Task failed.
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.059632 #58]  INFO -- : TaskModel: Task 10, trying to rollback all subtasks
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.062247 #58]  INFO -- : Service: Task ID: 10, Status: TransactionRolledBack, cannot set status
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.062365 #58]  INFO -- : HTTP RESPONSE, Task ID: 10, Response: 409
-ruby_1     | 07:39:48 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:48 +0000] "PUT /task/10/terminator HTTP/1.1" 409 - 0.0052
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.078631 #58]  INFO -- : TaskModel: Task 9, committed successfully
-ruby_1     | 07:39:48 service.1 | I, [2015-07-19T07:39:48.082727 #58]  INFO -- : HTTP RESPONSE, Task ID: 9, Response: 200
-ruby_1     | 07:39:48 service.1 | 172.17.3.102 - - [19/Jul/2015:07:39:48 +0000] "PUT /task/9/terminator HTTP/1.1" 200 - 0.0486
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.085227 #59]  INFO -- : TaskModel: Task 8, committed successfully
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.088507 #59]  INFO -- : Chaied transaction finished
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.092102 #59]  INFO -- : Task 8: TransactionCommitted
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.093990 #59]  INFO -- : Task 9: TransactionCommitted
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.095475 #59]  INFO -- : Task 10: TransactionRolledBack
-ruby_1     | 07:39:48 client.1  | I, [2015-07-19T07:39:48.096884 #59]  INFO -- : Task 11: TransactionActive
+Recreating narayanaruby_narayana_1...
+Recreating narayanaruby_ruby_1...
+Recreating narayanaruby_postgres_1...
+Recreating narayanaruby_dnsdock_1...
+Attaching to narayanaruby_narayana_1, narayanaruby_ruby_1, narayanaruby_postgres_1, narayanaruby_dnsdock_1
+narayana_1 | =========================================================================
+narayana_1 |   JBoss Bootstrap Environment
+narayana_1 |   JBOSS_HOME: /opt/jboss/wildfly
+narayana_1 |   JAVA: /usr/lib/jvm/java/bin/java
+narayana_1 |   JAVA_OPTS:  -server -Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true
+dnsdock_1  | 2015/07/24 06:59:21 Added service: 66d229f1499a773d93073cee837c5cac0cb06d1e0814e634df0e9a74be7e199a {postgres bihe 172.17.0.22 -1 []}
+narayana_1 | =========================================================================
+postgres_1 | LOG:  redo starts at 0/16A8198
+dnsdock_1  | 2015/07/24 06:59:21 Added service: be5779a78ce465144f832648874c5d1ddae0da736f66ed553b96fa299fe8ebaf {narayana bihe 172.17.0.18 -1 []}
+ruby_1     | Fri Jul 24 06:59:24 UTC 2015 - waiting to be ready
+ruby_1     |                                  List of databases
+ruby_1     |    Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+ruby_1     | -----------+----------+----------+------------+------------+-----------------------
+ruby_1     |  postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ruby_1     |  template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+ruby_1     |            |          |          |            |            | postgres=CTc/postgres
+ruby_1     |  template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+ruby_1     |            |          |          |            |            | postgres=CTc/postgres
+ruby_1     | (3 rows)
+ruby_1     | 06:59:25 service.1 | started with pid 42
+ruby_1     | 06:59:25 client.1  | started with pid 43
+ruby_1     | 06:59:26 client.1  | I, [2015-07-24T06:59:26.602202 #43]  INFO -- : Wait for others to boot
+ruby_1     | 06:59:26 service.1 | Puma 2.12.2 starting...
+ruby_1     | 06:59:26 service.1 | * Min threads: 0, max threads: 16
+ruby_1     | 06:59:26 service.1 | * Environment: development
+ruby_1     | 06:59:26 service.1 | * Listening on tcp://0.0.0.0:4567
+narayana_1 | 06:59:28,238 DEBUG [com.arjuna.ats.arjuna] (Periodic Recovery) PeriodicRecovery: background thread backing off
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.602400 #43]  INFO -- : First scenario, nested transactions
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.602474 #43]  INFO -- : Creating 7 Tasks
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.608131 #43]  INFO -- : Task 4 fails
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.614678 #43]  INFO -- : Creating nested transactions graph
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.635500 #43]  INFO -- : Commit nested transaction
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.649299 #43]  INFO -- : Tx: Initializing a new transaction
+narayana_1 | 06:59:46,710 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-1) PathInfo: /tx/transaction-manager
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.742689 #43]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.745124 #43]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/2 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,748 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-2) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,753 DEBUG [org.jboss.jbossts.star.service.Coordinator] (default task-2) enlisted participant: content= in tx 0_ffffac110012_-44abc06d_55b1e245_d Coordinator url base: http://narayana.bihe.docker:8080/rest-at-coordinator/tx/recovery-coordinator/
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.754926 #43]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/2 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+ruby_1     | 06:59:46 client.1  | 
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.755324 #43]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/3 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,758 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-3) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,759 DEBUG [org.jboss.jbossts.star.service.Coordinator] (default task-3) enlisted participant: content= in tx 0_ffffac110012_-44abc06d_55b1e245_d Coordinator url base: http://narayana.bihe.docker:8080/rest-at-coordinator/tx/recovery-coordinator/
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.761246 #43]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/3 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+ruby_1     | 06:59:46 client.1  | 
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.762046 #43]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/4 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,766 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-4) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,767 DEBUG [org.jboss.jbossts.star.service.Coordinator] (default task-4) enlisted participant: content= in tx 0_ffffac110012_-44abc06d_55b1e245_d Coordinator url base: http://narayana.bihe.docker:8080/rest-at-coordinator/tx/recovery-coordinator/
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.769002 #43]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/4 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+ruby_1     | 06:59:46 client.1  | 
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.769108 #43]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d
+narayana_1 | 06:59:46,772 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-5) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_d/terminator
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.804496 #42]  INFO -- : TX Manager PUT txstatus=TransactionPrepared for Task 4
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.804585 #42]  INFO -- : TaskModel: Setting status TransactionPrepared for task 4
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.804610 #42]  INFO -- : TaskModel: Task 4, Type: Nested, trying to prepare
+ruby_1     | 06:59:46 service.1 | W, [2015-07-24T06:59:46.804635 #42]  WARN -- : TaskModel: Task 4, Task failed.
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.804654 #42]  INFO -- : Service: Task ID: 4, Status: TransactionActive, cannot set status
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.804710 #42]  INFO -- : HTTP RESPONSE, Task ID: 4, Response: 409
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/4/terminator HTTP/1.1" 409 - 0.0155
+narayana_1 | 06:59:46,812 WARN  [com.arjuna.ats.arjuna] (default task-5) ARJUNA012073: BasicAction.End() - prepare phase of action-id 0:ffffac110012:-44abc06d:55b1e245:d failed.
+narayana_1 | 06:59:46,812 WARN  [com.arjuna.ats.arjuna] (default task-5) ARJUNA012075: Action Aborting
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.815981 #42]  INFO -- : TX Manager PUT txstatus=TransactionRolledBack for Task 4
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.816055 #42]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 4
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.816079 #42]  INFO -- : TaskModel: Task 4, trying to rollback
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.818982 #42]  INFO -- : HTTP RESPONSE, Task ID: 4, Response: 200
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/4/terminator HTTP/1.1" 200 - 0.0059
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.822791 #42]  INFO -- : TX Manager PUT txstatus=TransactionRolledBack for Task 3
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.822857 #42]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 3
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.822890 #42]  INFO -- : TaskModel: Task 3, trying to rollback
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.825287 #42]  INFO -- : HTTP RESPONSE, Task ID: 3, Response: 200
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/3/terminator HTTP/1.1" 200 - 0.0055
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.828759 #42]  INFO -- : TX Manager PUT txstatus=TransactionRolledBack for Task 2
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.828815 #42]  INFO -- : TaskModel: Setting status TransactionRolledBack for task 2
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.828835 #42]  INFO -- : TaskModel: Task 2, trying to rollback
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.831084 #42]  INFO -- : HTTP RESPONSE, Task ID: 2, Response: 200
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/2/terminator HTTP/1.1" 200 - 0.0050
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.837189 #43]  INFO -- : TaskModel: Task 1, committed successfully.
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.837250 #43]  INFO -- : TaskModel: Task 1, trying to commit childs.
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.839208 #43]  INFO -- : Nested transaction finished
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.841074 #43]  INFO -- : Task 1: TransactionCommitted
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.842756 #43]  INFO -- : Task 2: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.844189 #43]  INFO -- : Task 3: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.846493 #43]  INFO -- : Task 4: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.849020 #43]  INFO -- : Task 5: TransactionActive
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.850801 #43]  INFO -- : Task 6: TransactionActive
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.852683 #43]  INFO -- : Task 7: TransactionActive
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.852731 #43]  INFO -- : Second scenario, chained transactions
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.852758 #43]  INFO -- : Creating 4 Tasks, number 8 to 11
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.856019 #43]  INFO -- : Task 10 fails
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.859595 #43]  INFO -- : Creating chains
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.883012 #43]  INFO -- : Commit chained transaction
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.887920 #43]  INFO -- : Tx: Initializing a new transaction
+narayana_1 | 06:59:46,890 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-6) PathInfo: /tx/transaction-manager
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.893231 #43]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.893733 #43]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/9 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11
+narayana_1 | 06:59:46,896 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-7) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11
+narayana_1 | 06:59:46,899 DEBUG [org.jboss.jbossts.star.service.Coordinator] (default task-7) enlisted participant: content= in tx 0_ffffac110012_-44abc06d_55b1e245_11 Coordinator url base: http://narayana.bihe.docker:8080/rest-at-coordinator/tx/recovery-coordinator/
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.900591 #43]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/9 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.900687 #43]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11
+narayana_1 | 06:59:46,903 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-8) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_11/terminator
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.907861 #42]  INFO -- : TX Manager PUT txstatus=TransactionCommittedOnePhase for Task 9
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.907945 #42]  INFO -- : TaskModel: Setting status TransactionCommittedOnePhase for task 9
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.907968 #42]  INFO -- : TaskModel: Task 9, Type: Chained, trying to commit
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.910116 #42]  INFO -- : Tx: Initializing a new transaction
+narayana_1 | 06:59:46,912 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-9) PathInfo: /tx/transaction-manager
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.915021 #42]  INFO -- : Tx: Transaction initialized http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.918543 #42]  INFO -- : Tx: participate http://ruby.bihe.docker:4567/task/10 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13
+narayana_1 | 06:59:46,921 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-10) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13
+narayana_1 | 06:59:46,922 DEBUG [org.jboss.jbossts.star.service.Coordinator] (default task-10) enlisted participant: content= in tx 0_ffffac110012_-44abc06d_55b1e245_13 Coordinator url base: http://narayana.bihe.docker:8080/rest-at-coordinator/tx/recovery-coordinator/
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.923465 #42]  INFO -- : Tx: status 201, participate http://ruby.bihe.docker:4567/task/10 in http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.923580 #42]  INFO -- : Tx: Putting TransactionCommitted to transaction http://narayana.bihe.docker:8080/rest-at-coordinator/tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13
+narayana_1 | 06:59:46,926 FINE  [org.jboss.resteasy.core.SynchronousDispatcher] (default task-11) PathInfo: /tx/transaction-manager/0_ffffac110012_-44abc06d_55b1e245_13/terminator
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.933292 #42]  INFO -- : TX Manager PUT txstatus=TransactionCommittedOnePhase for Task 10
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.933376 #42]  INFO -- : TaskModel: Setting status TransactionCommittedOnePhase for task 10
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.933411 #42]  INFO -- : TaskModel: Task 10, Type: Chained, trying to commit
+ruby_1     | 06:59:46 service.1 | W, [2015-07-24T06:59:46.933446 #42]  WARN -- : TaskModel: Task 10, Task failed.
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.933475 #42]  INFO -- : TaskModel: Task 10, rolled back
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.935918 #42]  INFO -- : TaskModel: Task 10, trying to rollback prev. task
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.938492 #42]  INFO -- : TaskModel: Task 9, rolled back
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.940398 #42]  INFO -- : TaskModel: Task 9, trying to rollback prev. task
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.942998 #42]  INFO -- : TaskModel: Task 8, rolled back
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.944992 #42]  INFO -- : TaskModel: Task 8, trying to rollback prev. task
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.947327 #42]  INFO -- : Service: Task ID: 10, Status: TransactionRolledBack, cannot set status
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.947453 #42]  INFO -- : HTTP RESPONSE, Task ID: 10, Response: 409
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/10/terminator HTTP/1.1" 409 - 0.0179
+narayana_1 | 06:59:46,948 DEBUG [org.jboss.jbossts.star.resource.RESTRecord] (default task-11) commit exception: HTTP code: 409 body: : org.jboss.jbossts.star.provider.HttpResponseException: Unexpected status. Expected 200 got 409
+narayana_1 | 	at org.jboss.jbossts.star.util.TxSupport.httpRequest(TxSupport.java:508) [restat-util-5.0.0.Final.jar:5.0.0.Final]
+narayana_1 | 	at org.jboss.jbossts.star.util.TxSupport.httpRequest(TxSupport.java:463) [restat-util-5.0.0.Final.jar:5.0.0.Final]
+narayana_1 | 	at org.jboss.jbossts.star.resource.RESTRecord.doCommit(RESTRecord.java:322) [restat-api-5.0.0.Final.jar:5.0.0.Final]
+narayana_1 | 	at org.jboss.jbossts.star.resource.RESTRecord.topLevelOnePhaseCommit(RESTRecord.java:302) [restat-api-5.0.0.Final.jar:5.0.0.Final]
+narayana_1 | 	at com.arjuna.ats.arjuna.coordinator.BasicAction.onePhaseCommit(BasicAction.java:2317) [narayana-jts-jacorb-5.0.0.Final.jar:5.0.0.Final (revision: 9aa71)]
+narayana_1 | 	at com.arjuna.ats.arjuna.coordinator.BasicAction.End(BasicAction.java:1475) [narayana-jts-jacorb-5.0.0.Final.jar:5.0.0.Final (revision: 9aa71)]
+narayana_1 | 	at com.arjuna.ats.arjuna.coordinator.TwoPhaseCoordinator.end(TwoPhaseCoordinator.java:96) [narayana-jts-jacorb-5.0.0.Final.jar:5.0.0.Final (revision: 9aa71)]
+narayana_1 | 	at com.arjuna.ats.arjuna.AtomicAction.commit(AtomicAction.java:162) [narayana-jts-jacorb-5.0.0.Final.jar:5.0.0.Final (revision: 9aa71)]
+narayana_1 | 	at org.jboss.jbossts.star.service.Coordinator.terminateTransaction(Coordinator.java:434) [restat-api-5.0.0.Final.jar:5.0.0.Final]
+narayana_1 | 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) [rt.jar:1.7.0_79]
+narayana_1 | 	at java.lang.reflect.Method.invoke(Method.java:606) [rt.jar:1.7.0_79]
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.965690 #42]  INFO -- : TaskModel: Task 9, committed successfully
+ruby_1     | 06:59:46 service.1 | I, [2015-07-24T06:59:46.970306 #42]  INFO -- : HTTP RESPONSE, Task ID: 9, Response: 200
+ruby_1     | 06:59:46 service.1 | 172.17.0.18 - - [24/Jul/2015:06:59:46 +0000] "PUT /task/9/terminator HTTP/1.1" 200 - 0.0656
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.972858 #43]  INFO -- : TaskModel: Task 8, committed successfully
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.975377 #43]  INFO -- : Chaied transaction finished
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.977572 #43]  INFO -- : Task 8: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.979208 #43]  INFO -- : Task 9: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.981160 #43]  INFO -- : Task 10: TransactionRolledBack
+ruby_1     | 06:59:46 client.1  | I, [2015-07-24T06:59:46.982735 #43]  INFO -- : Task 11: TransactionActive
+narayana_1 | 07:01:28,240 DEBUG [com.arjuna.ats.arjuna] (Periodic Recovery) processing /StateManager/BasicAction/TwoPhaseCoordinator/AtomicAction transactions
+narayana_1 | 07:01:28,240 DEBUG [com.arjuna.ats.arjuna] (Periodic Recovery) found transaction 0:ffffac110012:-44abc06d:55b1e245:13
+narayana_1 | 07:01:28,241 DEBUG [com.arjuna.ats.txoj] (Periodic Recovery) TORecoveryModule - first pass
+narayana_1 | 07:01:28,243 DEBUG [com.arjuna.ats.arjuna] (Periodic Recovery)  
+narayana_1 | 07:01:28,244 DEBUG [com.arjuna.ats.jta] (Periodic Recovery) Local XARecoveryModule - first pass
+narayana_1 | 07:01:28,244 DEBUG [org.hornetq.jms.server] (Periodic Recovery) 
+narayana_1 | =======================================================================================
+narayana_1 | 07:01:28,245 DEBUG [org.hornetq.jms.server] (Periodic Recovery) Returning the following list on getXAREsources:
+narayana_1 | 07:01:28,247 DEBUG [org.hornetq.jms.server] (Periodic Recovery) server-id=80cfdc87-31d1-11e5-9447-6f8653504418, value=HornetQXAResourceWrapper [serverLocator=null, csf=null, delegate=null, xaRecoveryConfigs=[XARecoveryConfig [transportConfiguration = [TransportConfiguration(name=814cfbd2-31d1-11e5-9447-6f8653504418, factory=org-hornetq-core-remoting-impl-invm-InVMConnectorFactory) ?server-id=0], discoveryConfiguration = null, username=null, password=****]], instance=457814548]
+narayana_1 | 07:01:28,248 DEBUG [org.hornetq.jms.server] (Periodic Recovery) =======================================================================================
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping narayanaruby_dnsdock_1...
+Stopping narayanaruby_postgres_1...
+Stopping narayanaruby_ruby_1...
+Stopping narayanaruby_narayana_1...

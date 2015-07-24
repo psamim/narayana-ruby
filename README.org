@@ -45,9 +45,11 @@ tx.commit # Puts new status (TransactionCommitted) to Narayana for this transact
 
 I created a /Task/ model using =DataMapper= ORM, and created the /Task/ resource using =Sinatra= to respond to
 API calls from Wildfly server according to Narayana documentation. Each task can be type of /Chained/ or /Nested/.
-Chained tasks can have one /Next/ task. When a chained task is commited, its next task is
-triggered.
-Nested tasks can have multiple /SubTasks/. Each nested task is not commited until all of its subtasks are commited.
+Chained tasks can have one /next/ and one /prev/ task. When a chained task is commited, its next task is
+triggered. If one chained task fails, itself and its /prev/ are rolled back.
+
+Nested tasks can have multiple /childs/. When a nested task is commited, all of its children are triggered and commited in one
+transaction, all or none.
 
 Using this Task model, we can test our transaction manager. Here is a sample code.
 
@@ -56,10 +58,10 @@ Chained transactions:
 #+LATEX: \vspace{2mm}
 
 #+BEGIN_SRC ruby
-t1 = Task.create type: :Chained
-t2 = Task.create type: :Chained
+t1 = CheindTask.create
+t2 = CheindTask.create
 
-# Creating chain
+# Creating a chain
 t1.next = t2
 t1.save
 
@@ -73,20 +75,20 @@ Nested transactions:
 #+LATEX: \vspace{2mm}
 
 #+BEGIN_SRC ruby
-t1 = Task.create type: :Nested
-t2 = Task.create type: :Nested
-t3 = Task.create type: :Nested, fails: true
+t1 = NestedTask.create
+t2 = NestedTask.create
+t3 = NestedTask.create fails: true
 
 # Creating nested transaction
-t1.subtasks << t2 # Add t2 to subtasks
-t1.subtasks << t3
+t1.childs << t2 # Add t2 to childs
+t1.childs << t3
 t1.save
 
-t1.commit
+t1.commit # Commits t1, then t2 and t3 in one transaction
 #+END_SRC
 #+LATEX: \vspace{2mm}
 
-Two sample scenarios are tested as client in the =app/client.rb= file, one chained transaction and one nested.
+Two sample scenarios are tested as a client in the =app/client.rb= file, one chained transaction and one nested.
 These scenarios are run in a separate process called =client=. Also we have another process called =service= which
 is our server talking to Narayana API on Wildfly server. All interactions are logged to console. A sample log
 file is provided with the source code in =sample.log=. Here is an example log.
@@ -100,18 +102,16 @@ the name of the process, client or service.
 The results can be seen in the log file or reproduced by running the application.
 
 The first scenario is a nested transaction as picture below. Transaction 4 aborts.
-As a result the all transactions are rolled back except transaction 7, which is not triggered
-as its parent has aborted.
+As a result the root is commited, all siblings of T4 are rolled back, because they were in a transaction. Othere are not triggered
+because their parent has aborted.
 
 #+CAPTION: Nested Transaction
 #+ATTR_LATEX: :width 8cm
 [[./nested.png]]
 
 The second scenario is a chained transaction as picture below. C2 aborts.
-Chain stops. Its previous transaction is committed and nothing is changed. Its next
-transaction is not triggered and C2 itself is rolled back. If we consider the whole
-chain as one transaction we can start from the beginning of C2 as its previous
-task is committed.
+Chain stops. C2 and its previous tasks should be rolled back in reverse order.
+Its next transaction is not triggered. 
 
 #+CAPTION: Chained Transaction
 #+ATTR_LATEX: :width 8cm
