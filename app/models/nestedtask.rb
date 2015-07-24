@@ -4,7 +4,7 @@ require 'models/task'
 class NestedTask < Task
   def type
     :Nested
-  end;
+  end
 
   def commit
     if self.fails
@@ -23,6 +23,16 @@ class NestedTask < Task
     end
   end
 
+  def rollback
+    p "TaskModel: Task #{self.id}, trying to rollback"
+    self.update status: :TransactionRolledBack
+    return true
+  end
+
+  def prepare
+    self.commit
+  end
+
   def commitChilds
     if self.childs.empty?
       p "TaskModel: Task #{self.id}, has no childs."
@@ -35,11 +45,5 @@ class NestedTask < Task
       tx.participate t.url
     end
     tx.commit
-  end
-
-  def rollback
-    p "TaskModel: Task #{self.id}, trying to rollback"
-    self.update status: :TransactionRolledBack
-    return true
   end
 end

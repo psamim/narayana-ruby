@@ -21,11 +21,14 @@ class Task
   end
 
   def txStatus(txStatus)
-    MyLogger.info "TaskModel: Setting status #{txStatus} for task #{self.id}"
+    p "TaskModel: Setting status #{txStatus} for task #{self.id}"
 
-    if [:TransactionCommitted, :TransactionCommittedOnePhase, :TransactionPrepared].include? txStatus then
-      MyLogger.info "TaskModel: Task #{self.id}, Type: #{self.type}, trying to commit"
+    if [:TransactionCommitted, :TransactionCommittedOnePhase].include? txStatus then
+      p "TaskModel: Task #{self.id}, Type: #{self.type}, trying to commit"
       return self.commit
+    elsif :TransactionPrepared == txStatus then
+      p "TaskModel: Task #{self.id}, Type: #{self.type}, trying to prepare"
+      return self.prepare
     elsif :TransactionRolledBack == txStatus then
       return self.rollback
     end
