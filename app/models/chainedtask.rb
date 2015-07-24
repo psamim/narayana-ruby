@@ -1,3 +1,4 @@
+require 'narayana/transaction'
 require 'models/task'
 
 class ChainedTask < Task
@@ -7,14 +8,22 @@ class ChainedTask < Task
 
   def commit
     if self.fails
-      MyLogger.warn "TaskModel: Task #{self.id}, Task failed."
+      w "TaskModel: Task #{self.id}, Task failed."
       self.rollback
       return false
     end
 
     self.update status: :TransactionCommitted
     self.commitNextTask
-    MyLogger.info "TaskModel: Task #{self.id}, committed successfully"
+    p "TaskModel: Task #{self.id}, committed successfully"
+    return true
+  end
+
+  def rollback
+    p "TaskModel: Task #{self.id}, rolled back"
+    self.update status: :TransactionRolledBack
+    p "TaskModel: Task #{self.id}, trying to rollback prev. task"
+    self.prev.rollback if self.prev
     return true
   end
 
@@ -23,11 +32,5 @@ class ChainedTask < Task
     tx.participate self.next.url
     tx.commit
   end
-
-   def rollback
-    MyLogger.info "TaskModel: Task #{self.id}, trying to rollback all subtasks"
-    self.update status: :TransactionRolledBack
-    return true
-   end
 end
 

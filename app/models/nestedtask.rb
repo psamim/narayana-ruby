@@ -1,4 +1,4 @@
-
+require 'narayana/transaction'
 require 'models/task'
 
 class NestedTask < Task
@@ -27,10 +27,6 @@ class NestedTask < Task
     p "TaskModel: Task #{self.id}, trying to rollback"
     self.update status: :TransactionRolledBack
     return true
-  end
-
-  def prepare
-    self.commit
   end
 
   def commitChilds

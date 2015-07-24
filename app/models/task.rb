@@ -1,5 +1,3 @@
-require 'narayana/transaction'
-
 class Task
   include DataMapper::Resource
   property :id, Serial
@@ -28,7 +26,7 @@ class Task
       return self.commit
     elsif :TransactionPrepared == txStatus then
       p "TaskModel: Task #{self.id}, Type: #{self.type}, trying to prepare"
-      return self.prepare
+      return self.commit
     elsif :TransactionRolledBack == txStatus then
       return self.rollback
     end
