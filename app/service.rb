@@ -1,4 +1,3 @@
-require 'narayana/transaction'
 require 'link_header'
 
 class Service < Sinatra::Base
@@ -27,7 +26,7 @@ class Service < Sinatra::Base
 
   put '/task/:id/terminator' do
     body = request.body.read
-    logger.info "TX Manager put #{body} for Task #{@task.id}"
+    p "TX Manager PUT #{body} for Task #{@task.id}"
     newStatus = body[9, body.length].to_sym
 
     # If the participant is not in the correct state for the requested operation,
@@ -40,12 +39,12 @@ class Service < Sinatra::Base
 
     # If PUT fails, e.g., the participant cannot be prepared, then the service writer must return 409.
     if ! @task.txStatus newStatus
-      MyLogger.info "Service: Task ID: #{@task.id}, Status: #{@task.status}, cannot set status"
+      p "Service: Task ID: #{@task.id}, Status: #{@task.status}, cannot set status"
       halt 409
     end
 
     if !@task.save
-      MyLogger.info "Task ID: #{@task.id}, Status: #{@task.status}, cannot save task"
+      p "Task ID: #{@task.id}, Status: #{@task.status}, cannot save task"
       halt 409
     end
 
@@ -60,7 +59,7 @@ class Service < Sinatra::Base
   end
 
   after do
-    logger.info "HTTP RESPONSE, Task ID: #{@task.id}, Response: #{response.status}" unless @task == nil
+    p "HTTP RESPONSE, Task ID: #{@task.id}, Response: #{response.status}" unless @task == nil
   end
 
   get '/' do

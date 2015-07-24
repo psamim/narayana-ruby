@@ -24,17 +24,17 @@ t6 = NestedTask.create
 t7 = NestedTask.create
 
 p 'Creating nested transactions graph'
-t1.subtasks << t2
-t1.subtasks << t3
-t1.subtasks << t4
-t1.subtasks.save
+t1.childs << t2
+t1.childs << t3
+t1.childs << t4
+t1.childs.save
 
-t2.subtasks << t5
-t2.subtasks << t6
-t2.subtasks.save
+t2.childs << t5
+t2.childs << t6
+t2.childs.save
 
-t4.subtasks << t7
-t2.subtasks.save
+t4.childs << t7
+t2.childs.save
 
 p 'Commit nested transaction'
 t1.commit

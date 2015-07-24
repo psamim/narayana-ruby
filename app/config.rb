@@ -15,3 +15,7 @@ Call.auto_migrate!
 def p(params)
   MyLogger.info params
 end
+
+def w(params)
+  MyLogger.warn params
+end

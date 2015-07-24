@@ -16,6 +16,6 @@ class ChainedTask
 end
 
 class NestedTask
-  has n, :subtasks, self, :through => :links_to_childs, :via => :child
+  has n, :childs, self, :through => :links_to_childs, :via => :child
   has 1, :parent, self, :through => :links_to_parents, :via => :parent
 end
